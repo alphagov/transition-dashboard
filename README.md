@@ -1,1 +1,1 @@
-Check out http://shopify.github.com/dashing for more information.
+Dashboard for displaying information relating to the progress of Transition
