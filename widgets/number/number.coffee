@@ -1,5 +1,7 @@
 class Dashing.Number extends Dashing.Widget
   @accessor 'current', Dashing.AnimatedValue
+  @accessor 'todo', Dashing.AnimatedValue
+  @accessor 'done', Dashing.AnimatedValue
 
   @accessor 'difference', ->
     if @get('last')
