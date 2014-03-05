@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'dashing'
-gem 'rest-client'
-gem 'xml-simple'
+gem 'dashing', '1.3.2'
+gem 'rest-client', '1.6.7'
+gem 'xml-simple', '1.1.3'
