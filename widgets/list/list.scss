@@ -21,8 +21,9 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
   }
 
   ol, ul {
-    margin: 0 15px;
+    margin: 0 10px;
     text-align: left;
+    font-size: 15px;
     color: $label-color;
   }
 
@@ -44,7 +45,7 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
 
   .value {
     float: right;
-    margin-left: 12px;
+    margin-left: 5px;
     font-weight: 600;
     color: $value-color;
   }
