@@ -1,5 +1,6 @@
 require 'rest_client'
 require 'xmlsimple'
+require 'titleize'
 
 spreadsheet_root = "https://spreadsheets.google.com/feeds/cells/#{ENV['main_spreadsheet_key']}"
 # Worksheet three for the list of top 10 agencies.
@@ -16,7 +17,7 @@ def abbreviate_status(status)
   else
     # Return the status as normal as it doesn't need abbreviating,
     # but in CamelCase to match with the above.
-    status.camelize
+    status.titleize
   end
 end
 
