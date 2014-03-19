@@ -29,7 +29,7 @@ SCHEDULER.every '2h', :first_in => 0 do |job|
     status = abbreviate_status(XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C2"))['content']['content'])
     target = XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C3"))['content']['content']
     rag = XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C4"))['content']['content']
-    org_top_ten[org_number] = { label: org, value: rag, value: status, value: target }
+    org_top_ten[org_number] = { label: org, rag: rag, status: status, target: target }
     row += 1
     org_number += 1
   end
