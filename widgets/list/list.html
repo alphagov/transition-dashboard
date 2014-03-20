@@ -8,12 +8,22 @@
 </ol>
 
 <ul class="list-nostyle">
-  <li data-foreach-item="items">
-    <span class="label" data-bind="item.label"></span>
-    <span class="value" data-bind="item.rag"></span>
-    <span class="value" data-bind="item.status"></span>
-    <span class="value" data-bind="item.target"></span>
-  </li>
+  <table id="org_top_ten">
+    <tr data-foreach-item="items">
+      <td>
+        <span class="label" data-bind="item.label"></span>
+      </td>
+      <td>
+        <span class="value" data-bind="item.rag"></span>
+      </td>
+      <td>
+        <span class="value" data-bind="item.status"></span>
+      </td>
+      <td>
+        <span class="value" data-bind="item.target"></span>
+      </td>
+    </tr>
+  </table>
 </ul>
 
 <p class="more-info" data-bind="moreinfo"></p>
