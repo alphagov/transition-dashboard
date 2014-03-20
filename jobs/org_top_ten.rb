@@ -27,7 +27,8 @@ SCHEDULER.every '2h', :first_in => 0 do |job|
   (0..9).each do |orgs|
     org = XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C1"))['content']['content']
     status = abbreviate_status(XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C2"))['content']['content'])
-    target = XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C3"))['content']['content']
+    # Ignore the potentially present "- live" in the target month.
+    target = XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C3"))['content']['content'].strip.split("-")[0]
     rag = XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C4"))['content']['content']
     org_top_ten[org_number] = { label: org, rag: rag, status: status, target: target }
     row += 1
