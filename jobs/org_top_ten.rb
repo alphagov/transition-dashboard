@@ -9,10 +9,8 @@ spreadsheet_end_url = "#{spreadsheet_root}/3/public/values"
 org_top_ten = Hash.new({ value: 0 })
 
 def abbreviate_status(status)
-  # Construct abbreviations for long statuses from the spreadsheet.
-  if status.downcase.strip == "business as usual"
-    "BAU"
-  elsif status.downcase.strip == "content analysis, build & publish"
+  # Construct abbreviations for one long status from the spreadsheet.
+  if status.downcase.strip == "content analysis, build & publish"
     "Content Build"
   else
     # Return the status as normal as it doesn't need abbreviating,
