@@ -7,13 +7,23 @@ org_top_ten = Hash.new({ value: 0 })
 # Worksheet three for the list of top 10 agencies.
 SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/cells/#{ENV['main_spreadsheet_key']}/3/public/values"
 
-def get_organisation_transition_spreadsheet_data(row)
-  data = []
-  (1..5).each do |column|
-    response = RestClient.get("#{SPREADSHEET_URL}/R#{row}C#{column}")
-    data << XmlSimple.xml_in(response)['content']['content']
+def cell_content(row, column)
+  response = RestClient.get("#{SPREADSHEET_URL}/R#{row}C#{column}")
+  XmlSimple.xml_in(response)['content']['content']
+end
+
+def organisations
+  organisations = []
+  # Each row represents an organisation.
+  (2..11).each do |row|
+    organisations << {
+      label: cell_content(row, 1),
+      status: abbreviate_status(cell_content(row, 2)),
+      target: cell_content(row, 3).strip.split("-")[0],
+      rag: cell_content(row, 4)
+    }
   end
-  data
+  organisations
 end
 
 def abbreviate_status(status)
@@ -28,21 +38,5 @@ def abbreviate_status(status)
 end
 
 SCHEDULER.every '2h', :first_in => 0 do |job|
-  row = 2
-  org_number = 0
-
-  (0..9).each do
-    org_data = get_organisation_transition_spreadsheet_data(row)
-
-    org_top_ten[org_number] = {
-                                label: org_data[0],
-                                status: abbreviate_status(org_data[1]),
-                                target: org_data[2].strip.split("-")[0],
-                                rag: org_data[3]
-                              }
-    row += 1
-    org_number += 1
-  end
-
-  send_event('org_top_ten', { items: org_top_ten.values })
+  send_event('org_top_ten', { items: organisations })
 end
