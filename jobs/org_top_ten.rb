@@ -10,7 +10,8 @@ def get_spreadsheet_xml(row, column)
 
   data = Hash.new()
   (0..4).each do |i|
-    data[i] = XmlSimple.xml_in(RestClient.get("#{spreadsheet_url}/R#{row}C#{column}"))['content']['content']
+    response = RestClient.get("#{spreadsheet_url}/R#{row}C#{column}")
+    data[i] = XmlSimple.xml_in(response)['content']['content']
     column += 1
   end
   data.values
