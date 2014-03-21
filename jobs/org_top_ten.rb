@@ -4,17 +4,17 @@ require 'titleize'
 
 org_top_ten = Hash.new({ value: 0 })
 
-def get_spreadsheet_xml(row, column)
+def get_organisation_transition_spreadsheet_data(row, column)
   # Worksheet three for the list of top 10 agencies.
   spreadsheet_url = "https://spreadsheets.google.com/feeds/cells/#{ENV['main_spreadsheet_key']}/3/public/values"
 
-  data = Hash.new()
+  data = Array.new
   (0..4).each do |i|
     response = RestClient.get("#{spreadsheet_url}/R#{row}C#{column}")
     data[i] = XmlSimple.xml_in(response)['content']['content']
     column += 1
   end
-  data.values
+  data
 end
 
 def abbreviate_status(status)
@@ -33,13 +33,13 @@ SCHEDULER.every '2h', :first_in => 0 do |job|
   org_number = 0
 
   (0..9).each do
-    org_values = get_spreadsheet_xml(row, 1)
+    org_data = get_organisation_transition_spreadsheet_data(row, 1)
 
     org_top_ten[org_number] = {
-                                label: org_values[0],
-                                status: abbreviate_status(org_values[1]),
-                                target: org_values[2].strip.split("-")[0],
-                                rag: org_values[3]
+                                label: org_data[0],
+                                status: abbreviate_status(org_data[1]),
+                                target: org_data[2].strip.split("-")[0],
+                                rag: org_data[3]
                               }
     row += 1
     org_number += 1
