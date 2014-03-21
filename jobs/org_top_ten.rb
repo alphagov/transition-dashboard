@@ -4,13 +4,13 @@ require 'titleize'
 
 org_top_ten = Hash.new({ value: 0 })
 
-def get_organisation_transition_spreadsheet_data(row, column)
-  # Worksheet three for the list of top 10 agencies.
-  spreadsheet_url = "https://spreadsheets.google.com/feeds/cells/#{ENV['main_spreadsheet_key']}/3/public/values"
+# Worksheet three for the list of top 10 agencies.
+SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/cells/#{ENV['main_spreadsheet_key']}/3/public/values"
 
+def get_organisation_transition_spreadsheet_data(row, column)
   data = Array.new
   (0..4).each do |i|
-    response = RestClient.get("#{spreadsheet_url}/R#{row}C#{column}")
+    response = RestClient.get("#{SPREADSHEET_URL}/R#{row}C#{column}")
     data[i] = XmlSimple.xml_in(response)['content']['content']
     column += 1
   end
