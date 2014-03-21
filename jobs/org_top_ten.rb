@@ -22,7 +22,7 @@ end
 SCHEDULER.every '2h', :first_in => 0 do |job|
   row = 2
   org_number = 0
-  (0..9).each do |orgs|
+  (0..9).each do
     org = XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C1"))['content']['content']
     status = abbreviate_status(XmlSimple.xml_in(RestClient.get("#{spreadsheet_end_url}/R#{row}C2"))['content']['content'])
     # Ignore the potentially present "- live" in the target month.
