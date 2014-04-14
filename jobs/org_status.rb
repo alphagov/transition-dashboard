@@ -3,13 +3,15 @@ require 'xmlsimple'
 
 SPREADSHEET_ROOT = "https://spreadsheets.google.com/feeds/cells/#{ENV['main_spreadsheet_key']}/od6/public/values"
 
-SCHEDULER.every '15m', :first_in => 0 do |job|
+def fetch_with_retry(cell)
   begin
-    done = XmlSimple.xml_in(RestClient.get("#{SPREADSHEET_ROOT}/R1C6"))['content']['content']
-    todo = XmlSimple.xml_in(RestClient.get("#{SPREADSHEET_ROOT}/R1C8"))['content']['content']
+    value = XmlSimple.xml_in(RestClient.get("#{SPREADSHEET_ROOT}/#{cell}"))['content']['content']
     sleep(2)
-  end until done != '#N/A' && done != '#VALUE!' && todo != "#N/A" && todo != '#VALUE!'
+  end until value != '#N/A' && done != '#VALUE!'
+  value
+end
 
-  send_event('orgs_done', { done: done })
-  send_event('orgs_todo', { todo: todo })
+SCHEDULER.every '15m', :first_in => 0 do |job|
+  send_event('orgs_done', { done: fetch_with_retry('R1C6') })
+  send_event('orgs_todo', { todo: fetch_with_retry('R1C8') })
 end
