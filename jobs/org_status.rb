@@ -7,7 +7,7 @@ def fetch_with_retry(cell)
   begin
     value = XmlSimple.xml_in(RestClient.get("#{SPREADSHEET_ROOT}/#{cell}"))['content']['content']
     sleep(2)
-  end until value != '#N/A' && done != '#VALUE!'
+  end until value != '#N/A' && value != '#VALUE!'
   value
 end
 
