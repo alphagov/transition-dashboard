@@ -7,9 +7,13 @@ org_top_ten = Hash.new({ value: 0 })
 # Worksheet three for the list of top 10 agencies.
 SPREADSHEET_URL = "https://spreadsheets.google.com/feeds/cells/#{ENV['main_spreadsheet_key']}/3/public/values"
 
-def cell_content(row, column)
-  response = RestClient.get("#{SPREADSHEET_URL}/R#{row}C#{column}")
-  XmlSimple.xml_in(response)['content']['content']
+def cell_content_with_retry(row, column)
+  begin
+    response = RestClient.get("#{SPREADSHEET_URL}/R#{row}C#{column}")
+    XmlSimple.xml_in(response)['content']['content']
+    sleep(2)
+  end until response != '#N/A' && response != '#VALUE!'
+  response
 end
 
 def organisations
@@ -17,10 +21,10 @@ def organisations
   # Each row represents an organisation.
   (2..11).each do |row|
     organisations << {
-      label: cell_content(row, 1),
-      status: abbreviate_status(cell_content(row, 2)),
-      target: cell_content(row, 3).strip.split("-")[0],
-      rag: cell_content(row, 4)
+      label: cell_content_with_retry(row, 1),
+      status: abbreviate_status(cell_content_with_retry(row, 2)),
+      target: cell_content_with_retry(row, 3).strip.split("-")[0],
+      rag: cell_content_with_retry(row, 4)
     }
   end
   organisations
