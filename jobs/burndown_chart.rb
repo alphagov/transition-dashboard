@@ -1,32 +1,29 @@
-require 'rest_client'
-require 'xmlsimple'
-
-def graph_points
-  graph_points = []
-  worksheet = 2
+def graph_points(type)
   row = 2
-  column = 1
   dates = []
-  actual_numbers = []
+  actual_training = []
+  expected_training = []
 
   # There are twenty-eight rows in the spreadsheet.
   (0..27).each do
-    dates.push(SpreadsheetData.content(worksheet, row, column))
-    actual_numbers.push(SpreadsheetData.content(worksheet, row, (column += 1)))
-    column = 1 # For each iteration of row, reset the column count.
+    # Format of method params: Worksheet, Row, Column.
+    dates.push({ x: SpreadsheetData.content(2, row, 1) })
+    actual_training.push({ y: SpreadsheetData.content(2, row, 2) })
+    expected_training.push({ y: SpreadsheetData.content(2, row, 3) })
     row += 1
   end
 
-  dates.each do |date|
-    graph_points << { x: date }
+  # Condense the two hashes into actual or expected arrays of hashes
+  # of the form:
+  # [{:x=>"1/26/2014", :y=>"800"}]
+  if type == 'actual'
+    return dates.zip(actual_training).collect { |array| array.inject(:merge) }
+  elsif type == 'expected'
+    return dates.zip(expected_training).collect { |array| array.inject(:merge) }
   end
-  actual_numbers.each do |number|
-    graph_points << { y: number }
-  end
-  puts graph_points.inspect
-  graph_points
 end
 
 SCHEDULER.every '2h', :first_in => 0 do |job|
-  send_event('burndown_chart', { points: graph_points })
+  send_event('burndown_chart', { actual: graph_points('actual'),
+                                 expected: graph_points('expected') })
 end
