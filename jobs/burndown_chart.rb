@@ -7,15 +7,14 @@ def graph_points(type)
   # There are twenty-eight rows in the spreadsheet.
   (0..27).each do
     # Format of method params: Worksheet, Row, Column.
-    dates.push({ x: SpreadsheetData.content(2, row, 1) })
-    actual_training.push({ y: SpreadsheetData.content(2, row, 2) })
-    expected_training.push({ y: SpreadsheetData.content(2, row, 3) })
+    # Convert the date to epoch time with .to_i.
+    dates.push({ x: SpreadsheetData.content(2, row, 1).to_i })
+    actual_training.push({ y: SpreadsheetData.content(2, row, 2).to_i })
+    expected_training.push({ y: SpreadsheetData.content(2, row, 3).to_i })
     row += 1
   end
 
-  # Condense the two hashes into actual or expected arrays of hashes
-  # of the form:
-  # [{:x=>"1/26/2014", :y=>"800"}]
+  # Condense the two hashes into actual or expected arrays of hashes.
   if type == 'actual'
     return dates.zip(actual_training).collect { |array| array.inject(:merge) }
   elsif type == 'expected'
