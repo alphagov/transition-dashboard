@@ -5,7 +5,7 @@ $background-color:  #dc5945;
 
 $title-color:       rgba(255, 255, 255, 0.7);
 $moreinfo-color:    rgba(255, 255, 255, 0.3);
-$tick-color:        rgba(0, 0, 0, 0.4);
+$tick-color:        rgba(0, 0, 0, 0.5);
 
 
 // ----------------------------------------------------------------------------
@@ -19,8 +19,8 @@ $tick-color:        rgba(0, 0, 0, 0.4);
 
   svg {
     position: absolute;
-    opacity: 0.4;
-    fill-opacity: 0.4;
+    opacity: 5;
+    fill-opacity: 5;
     left: 0px;
     top: 0px;
   }
@@ -31,6 +31,7 @@ $tick-color:        rgba(0, 0, 0, 0.4);
   }
 
   .title {
+    padding-bottom: 700px;
     color: $title-color;
   }
 
@@ -47,13 +48,15 @@ $tick-color:        rgba(0, 0, 0, 0.4);
     .title {
       font-size: 20px;
       color: $tick-color;
-      opacity: 0.5;
+      fill: $tick-color;
+      fill-opacity: 1;
       padding-bottom: 3px;
     }
   }
 
   .y_ticks {
     font-size: 20px;
+    color: $tick-color;
     fill: $tick-color;
     fill-opacity: 1;
   }
