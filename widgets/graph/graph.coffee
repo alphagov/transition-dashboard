@@ -14,11 +14,11 @@ class Dashing.Graph extends Dashing.Widget
       renderer: 'line'
       series: [
         {
-          color: "#fff",
+          color: "#10b5ad",
           data: [{x:0, y:0}]
         },
         {
-          color: "#222",
+          color: "#fec04c",
           data: [{x:0, y:0}]
         }
       ]
